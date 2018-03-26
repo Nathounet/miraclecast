@@ -63,7 +63,7 @@ while getopts "r:d:as:p:h" optname
     esac
   done
 
-RUN="vlc rtp://@:$PORT"
-
-echo "running: $RUN"
-exec ${RUN}
+USER=$(who -u | awk '{print $1}')
+CMD="cvlc rtp://@:$PORT"
+echo "Running: su $USER -c "$CMD""
+exec su $USER -c "$CMD"
