@@ -16,7 +16,7 @@ elif [ "$#" = 0 ];
 then
   sudo miracle-wifid &
   sleep 2
-  sudo miracle-sinkctl --res 17000,00,00
+  sudo miracle-sinkctl
 else
   echo "Please run ./launch.sh [info|debug|trace]"
   exit
