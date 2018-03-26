@@ -69,6 +69,8 @@ while getopts "r:d:as:p:h" optname
     esac
   done
 
+PLTFM=$(cat /proc/cpuinfo | grep ARM)
+
 RUN="/usr/bin/gst-launch-1.0 -v "
 if [ $DEBUG != '0' ]
 then
@@ -82,14 +84,26 @@ then
   RUN+="name=demuxer demuxer. "
 fi
 
-RUN+="! queue max-size-buffers=0 max-size-time=0 ! h264parse ! avdec_h264 ! videoconvert ! "
+RUN+="! queue max-size-buffers=0 max-size-time=0 ! h264parse ! "
+
+if [ -z "$PLTFM" ];
+then
+  RUN+="avdec_h264 ! videoconvert ! " # For Laptop
+else
+  RUN+="omxh264dec ! videoconvert ! " # For RPi
+fi
 
 if [ $SCALE == '1' ]
 then
   RUN+="videoscale method=1 ! video/x-raw,width=${WIDTH},height=${HEIGHT} ! "
 fi
 
-RUN+="autovideosink "
+if [ -z "$PLTFM" ];
+then
+  RUN+="autovideosink " # For Laptop
+else
+  RUN+="ximagesink "    # For RPi
+fi
 
 if [ $AUDIO == '1' ]
 then

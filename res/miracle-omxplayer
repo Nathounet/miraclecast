@@ -63,7 +63,14 @@ while getopts "r:d:as:p:h" optname
     esac
   done
 
-RUN="omxplayer -live -b -o hdmi rtp://@:$PORT"
+#Get the IP address of the P2P interface
+ADDR=`ip addr list | grep "p2p-wlan" | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`
+
+if [ -z "$ADDR" ];
+then
+  ADDR="@" # Fallback on previous global implementation
+fi
+RUN="omxplayer --live -b -o hdmi --threshold 0 rtp://$ADDR:$PORT"
 
 echo "running: $RUN"
 exec ${RUN}
