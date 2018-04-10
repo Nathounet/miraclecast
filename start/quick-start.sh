@@ -20,9 +20,9 @@ fi
 # Checks
 cd ../res
 echo -e "\n>> Hardware capabilitiy check:"
-sudo ./test-hardware-capabilities.sh
+./test-hardware-capabilities.sh
 echo -e "\n>> Software requirement check:"
-sudo ./test-viewer.sh
+./test-viewer.sh
 echo ">> Please verify results of above checks."
 read -p "   Then press any key to continue... " -n1 -s
 
